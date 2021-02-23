@@ -7,3 +7,10 @@
     font-family: "Open Sans", sans-serif;
     font-weight: 600;
 }
+
+.Home .lander img {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width: 90%;
+}

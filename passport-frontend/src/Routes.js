@@ -4,6 +4,7 @@ import Home from "./pages/Home";
 import Signup from "./pages/Signup";
 import Login from "./pages/Login";
 import NotFound from "./pages/NotFound";
+import NewNote from "./pages/NewTrip";
 
 export default function Routes() {
   return (
@@ -16,6 +17,9 @@ export default function Routes() {
       </Route>
       <Route exact path="/login">
         <Login />
+      </Route>
+      <Route exact path="/trips/new">
+        <NewNote />
       </Route>
       {/* Finally, catch all unmatched routes */}
       <Route>
