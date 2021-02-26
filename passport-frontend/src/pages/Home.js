@@ -82,7 +82,7 @@ export default function Home() {
         <h2 className="pb-3 mt-4 mb-3 border-bottom">Your Trips</h2>
         <ListGroup>{!isLoading && renderTripsList(trips)}</ListGroup>
         <div className="py-3">
-          <MapContainer/>
+          <MapContainer className="py-3"/>
         </div>
       </div>
     );
