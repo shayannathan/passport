@@ -1,5 +1,6 @@
 import AWS from "aws-sdk";
 
+AWS.config.update({ region: "us-east-2" }); //If DynamoDB is in different region than Lambda Function
 const client = new AWS.DynamoDB.DocumentClient();
 
 export default {
