@@ -10,7 +10,8 @@ export const main = handler(async (event, context) => {
         // The attributes of the item to be created
         userId: event.requestContext.identity.cognitoIdentityId, // The id of the author
         tripId: uuid.v1(), // A unique uuid
-        date: Date.now(),
+        date: data.tripDate,
+        location: data.location,
         description: data.content, // Parsed from request body
         attachment: data.attachment, // Parsed from request body
         createdAt: Date.now(), // Current Unix timestamp

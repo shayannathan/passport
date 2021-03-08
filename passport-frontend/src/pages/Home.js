@@ -21,8 +21,7 @@ export default function Home() {
       }
   
       try {
-        //const trips = await loadNotes(); will call api
-        const trips = [];
+        const trips = await loadTrips();
         setTrips(trips);
       } catch (e) {
         onError(e);
@@ -34,11 +33,12 @@ export default function Home() {
     onLoad();
   }, [isAuthenticated]);
   
-  function loadNotes() {
-    return API.get("notes", "/notes");
+  function loadTrips() {
+    return API.get("trips", "/trips");
   }
 
-  function renderTripsList(notes) {
+  function renderTripsList(trips) {
+    console.log(trips);
     return (
       <>
         <LinkContainer to="/trips/new">
@@ -47,15 +47,15 @@ export default function Home() {
             <span className="ml-2 font-weight-bold">Add a new trip</span>
           </ListGroup.Item>
         </LinkContainer>
-        {notes.map(({ noteId, content, createdAt }) => (
-          <LinkContainer key={noteId} to={`/notes/${noteId}`}>
+        {trips.map(({ tripId, location, date }) => (
+          <LinkContainer key={tripId} to={`/trips/${tripId}`}>
             <ListGroup.Item action>
               <span className="font-weight-bold">
-                {content.trim().split("\n")[0]}
+                {location}
               </span>
               <br />
               <span className="text-muted">
-                Created: {new Date(createdAt).toLocaleString()}
+                Travelled: {date}
               </span>
             </ListGroup.Item>
           </LinkContainer>
@@ -81,8 +81,9 @@ export default function Home() {
       <div className="trips">
         <h2 className="pb-3 mt-4 mb-3 border-bottom">Your Trips</h2>
         <ListGroup>{!isLoading && renderTripsList(trips)}</ListGroup>
-        <div className="py-3">
-          <MapContainer className="py-3"/>
+        <div className="py-3">{
+          !isLoading && <MapContainer className="py-3"/>
+        }
         </div>
       </div>
     );

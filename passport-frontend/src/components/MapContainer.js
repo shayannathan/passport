@@ -13,17 +13,19 @@ export class MapContainer extends Component {
     return (
       <Map 
         google={this.props.google}
-        zoom={13}
+        zoom={9}
         style={mapStyles}
         initialCenter={
           {
-            lat: 47.65,
-            lng: -122.30
+            lat: 37.65,
+            lng: -122.33
           }
         }
       />
     );
   }
+
+  
 }
 
 export default GoogleApiWrapper({
