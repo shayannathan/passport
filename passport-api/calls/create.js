@@ -11,7 +11,9 @@ export const main = handler(async (event, context) => {
         userId: event.requestContext.identity.cognitoIdentityId, // The id of the author
         tripId: uuid.v1(), // A unique uuid
         date: data.tripDate,
-        location: data.location,
+        location: data.place.location,
+        lat: data.place.lat,
+        lng: data.place.lng,
         description: data.content, // Parsed from request body
         attachment: data.attachment, // Parsed from request body
         createdAt: Date.now(), // Current Unix timestamp

@@ -2,14 +2,21 @@ import React, { useState, useEffect, useRef } from "react";
 import config from "../config";
 import Form from "react-bootstrap/Form";
 
-export default function LocationSearch() {
-    const [location, setLocation] = useState("");
-    //const [lat, setLat] = useState("");
-    //const [lng, setLng] = useState("");
+export default function LocationSearch(props) {
+    
     const autoCompleteRef = useRef(null);
 
     let autoComplete;
 
+    // Similar to componentDidMount and commponentDidUpdate
+    useEffect(() => {
+        loadScript(
+          `https://maps.googleapis.com/maps/api/js?key=${config.googleMapsAPIKey}&libraries=places`,
+          () => handleScriptLoad(autoCompleteRef)
+        );
+    }, []);
+
+    // Calls Google Maps to get AutoComplete
     const loadScript = (url, callback) => {
         let script = document.createElement("script");
         script.type = "text/javascript";
@@ -29,6 +36,7 @@ export default function LocationSearch() {
         document.getElementsByTagName("head")[0].appendChild(script);
     };
 
+    // Constructs AutoComplete object with our configurations (has its own action listener)
     function handleScriptLoad(autoCompleteRef) {
         autoComplete = new window.google.maps.places.Autocomplete(
             autoCompleteRef.current,
@@ -40,32 +48,26 @@ export default function LocationSearch() {
         );
     }
 
+    // Function that happens when place changes
     async function handlePlaceSelect() {
         const addressObject = autoComplete.getPlace();
-        const location1 = addressObject.formatted_address;
-        //const lat = addressObject.geometry.location.lat();
-        //const lng = addressObject.geometry.location.lng();
-        setLocation(location1);
-        //setLat(lat);
-        //setLng(lng);
-        console.log(location1);
-        console.log(this.location);
+        const city = addressObject.formatted_address;
+        const latTemp = addressObject.geometry.location.lat();
+        const lngTemp = addressObject.geometry.location.lng();
+        const newTrip = {
+            location: city,
+            lat: latTemp,
+            lng: lngTemp
+        };
+        props.onChange(newTrip);
     }
 
-    useEffect(() => {
-        loadScript(
-          `https://maps.googleapis.com/maps/api/js?key=${config.googleMapsAPIKey}&libraries=places`,
-          () => handleScriptLoad(autoCompleteRef)
-        );
-    }, []);
-    
     return (
         <div className="search-location-input">
           <Form.Control
             ref={autoCompleteRef}
-            onChange={event => setLocation(event.target.value)}
             placeholder="Enter a City"
-            value={location}
+            value={props.location}
           />
         </div>
     );

@@ -7,20 +7,26 @@ import config from "../config";
 import "./NewTrip.css";
 import { API } from "aws-amplify";
 import { s3Upload } from "../libs/awsLib";
-import SearchLocationInput from "../components/SearchLocationInput";
 import LocationSearch from "../components/LocationSearch";
 
 export default function NewTrip() {
   const file = useRef(null);
   const history = useHistory();
-  const [location, setLocation] = useState("");
+  const [place, setPlace] = useState(null);
   const [tripDate, setTripDate] = useState("");
   const [content, setContent] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
   function validateForm() {
-    console.log(location);
-    return location && tripDate;
+    return place && tripDate;
+  }
+
+  function handleLocationChange(newPlace) {
+    setPlace({
+      location: newPlace.location,
+      lat: newPlace.lat,
+      lng: newPlace.lng
+    });
   }
 
   function handleFileChange(event) {
@@ -42,9 +48,7 @@ export default function NewTrip() {
 
     try {
       const attachment = file.current ? await s3Upload(file.current) : null;
-      console.log(location);
-      //console.log(location.formatted_address);
-      await createTrip({ location, tripDate, content, attachment });
+      await createTrip({ place, tripDate, content, attachment });
       history.push("/");
     } catch (e) {
       onError(e);
@@ -58,25 +62,12 @@ export default function NewTrip() {
     });
   }
 
-  function testFunc(e) {
-    console.log(e.target.value);
-    setLocation(e.target.value);
-  }
-
   return (
     <div className="NewTrip">
       <Form onSubmit={handleSubmit}>
         <Form.Group size="" controlId="email">
           <Form.Label>Location</Form.Label>
-            {/*<Form.Control
-              autoFocus
-              type="text"
-              value={location}
-              onChange={(e) => setLocation(e.target.value)}
-            />
-            <SearchLocationInput value={location} onChange={() => null} />
-            <LocationSearch onChange={(e) => setLocation(e.target.value)}/>*/}
-            <LocationSearch onChange={(e) => testFunc(e)}/>
+          <LocationSearch value={place} onChange = {(e) => handleLocationChange(e)}/>
         </Form.Group>
         <Form.Group size="" controlId="email">
           <Form.Label>Trip Date</Form.Label>

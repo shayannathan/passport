@@ -9,6 +9,10 @@ const mapStyles = {
 };
 
 export class MapContainer extends Component {
+  constructor(props) {
+    super(props);
+  }
+
   render() {
     return (
       <Map 
@@ -21,7 +25,18 @@ export class MapContainer extends Component {
             lng: -122.33
           }
         }
-      />
+      >
+      {this.props.data.map((trip, i) => {
+        return(<Marker
+          key={i}
+          position = {{
+            lat: trip.lat,
+            lng: trip.lng
+          }}
+          title = {trip.location}
+        />)
+      })}
+      </Map>
     );
   }
 

@@ -38,7 +38,6 @@ export default function Home() {
   }
 
   function renderTripsList(trips) {
-    console.log(trips);
     return (
       <>
         <LinkContainer to="/trips/new">
@@ -47,7 +46,7 @@ export default function Home() {
             <span className="ml-2 font-weight-bold">Add a new trip</span>
           </ListGroup.Item>
         </LinkContainer>
-        {trips.map(({ tripId, location, date }) => (
+        {trips.map(({ tripId, location, date, description }) => (
           <LinkContainer key={tripId} to={`/trips/${tripId}`}>
             <ListGroup.Item action>
               <span className="font-weight-bold">
@@ -56,6 +55,10 @@ export default function Home() {
               <br />
               <span className="text-muted">
                 Travelled: {date}
+              </span>
+              <br />
+              <span className="text-muted">
+                Description: {description}
               </span>
             </ListGroup.Item>
           </LinkContainer>
@@ -82,7 +85,7 @@ export default function Home() {
         <h2 className="pb-3 mt-4 mb-3 border-bottom">Your Trips</h2>
         <ListGroup>{!isLoading && renderTripsList(trips)}</ListGroup>
         <div className="py-3">{
-          !isLoading && <MapContainer className="py-3"/>
+          !isLoading && <MapContainer data={trips} className="py-3"/>
         }
         </div>
       </div>
